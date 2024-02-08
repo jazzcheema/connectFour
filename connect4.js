@@ -19,11 +19,13 @@ const board = []; // array of rows, each row is array of cells  (board[y][x])
 
 function makeBoard() {
   // set "board" to empty HEIGHT x WIDTH matrix array
-  // TODO: add a more detail comment on what this method does
   // other way you can do it is to write two for loops:
   // outer for loop called row, inner for loop pushes "null" to array
   // can also use Array.from
-  board.push(...Array(HEIGHT).fill(null).map(() => Array(WIDTH).fill(null)));
+  for (let i = 0; i <= HEIGHT; i++) {
+    board.push(Array.from({ length: WIDTH }).fill(null));
+  }
+  // board.push(...Array(HEIGHT).fill(null).map(() => Array(WIDTH).fill(null)));
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
@@ -101,10 +103,11 @@ function checkForWin() {
     // player boolean
     // dont use magic numbers use WIDTH and HEIGHT
     for (let cell of cells) {
+
       if (cell[0] < 0 || cell[0] > HEIGHT - 1 || cell[1] < 0 || cell[1] > WIDTH - 1) {
         return false;
       }
-      if(board[cell[0]][cell[1]] !== currPlayer) {
+      if (board[cell[0]][cell[1]] !== currPlayer) {
         return false;
       }
     }
@@ -140,6 +143,9 @@ function checkForWin() {
 // reenable this later
 function endGame(msg) {
   alert(msg);
+  setTimeout(() => {
+    location.reload();
+  }, 2000);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -147,6 +153,7 @@ function endGame(msg) {
 function handleClick(evt) {
   // get x from ID of clicked cell
   const x = Number(evt.target.id.slice("top-".length));
+  console.log('x=', x);
 
   // get next spot in column (if none, ignore click)
   const y = findSpotForCol(x);
@@ -165,7 +172,7 @@ function handleClick(evt) {
 
   // check for tie: if top row is filled, board is filled
   // refactor to only check top row
-  if(board[0].every(x => x !== null)) {
+  if (board[0].every(x => x !== null)) {
     return endGame("It's a tie!");
   }
   // switch players
